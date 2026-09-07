@@ -2,9 +2,9 @@
 https://leetcode.com/problems/distinct-subsequences/
 '''
 
-last_solved     = "2026-09-06"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-07"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "hard"
 topic_tags      = ["string", "dynamic-programming"]
 

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/validate-binary-search-tree/
 '''
 
-last_solved     = "2026-07-16"
-revisit_in_days = 53
-times_reviewed  = 7
+last_solved     = "2026-09-07"
+revisit_in_days = 40
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["trees", "bst"]
 

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/walls-and-gates/description/
 '''
 
-last_solved     = "2026-07-21"
-revisit_in_days = 48
-times_reviewed  = 7
+last_solved     = "2026-09-07"
+revisit_in_days = 42
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["graphs"]
 
@@ -17,33 +17,27 @@ class Solution:
         M = len(rooms)
         N = len(rooms[0])
 
-        queue = deque()
+        DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
-        for row in range(M):
-            for col in range(N):
-                if not rooms[row][col]:
-                    queue.append([row,col])
-        
+        queue = deque()
+        for i in range(M):
+            for j in range(N):
+                if rooms[i][j] == 0:
+                    queue.append((i, j))
+
         distance = 0
         while queue:
             distance += 1
             for _ in range(len(queue)):
-                curr_x, curr_y = queue.popleft()
+                i, j = queue.popleft()
 
-                directions = [
-                    (1, 0),
-                    (-1, 0),
-                    (0, 1),
-                    (0, -1),
-                ]
-
-                for x_adj, y_adj in directions:
-                    new_x, new_y = curr_x + x_adj, curr_y + y_adj
+                for i_adj, j_adj in DIRECTIONS:
+                    n_i, n_j = i + i_adj, j + j_adj
 
                     if (
-                        0 <= new_x < M
-                        and 0 <= new_y < N
-                        and rooms[new_x][new_y] == INF
+                        0 <= n_i < M and
+                        0 <= n_j < N and
+                        rooms[n_i][n_j] == INF
                     ):
-                        rooms[new_x][new_y] = distance
-                        queue.append([new_x, new_y])
+                        rooms[n_i][n_j] = distance
+                        queue.append((n_i, n_j))

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/redundant-connection/
 '''
 
-last_solved     = "2026-09-06"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-07"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["depth-first-search", "breadth-first-search", "union-find", "graph"]
 
@@ -14,10 +14,9 @@ class UnionFind:
         self.parent = [i for i in range(n + 1)]
 
     def find(self, n):
-        while self.parent[n] != n:
-            self.parent[n] = self.parent[self.parent[n]]  # path compression (halving)
-            n = self.parent[n]
-        return n
+        if self.parent[n] != n:
+            self.parent[n] = self.find(self.parent[n])
+        return self.parent[n]
 
     def union(self, src, dest):
         self.parent[self.find(dest)] = self.find(src)
