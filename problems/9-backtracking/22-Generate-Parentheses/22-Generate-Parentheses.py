@@ -3,7 +3,7 @@ https://leetcode.com/problems/generate-parentheses/
 '''
 
 last_solved     = "2026-08-02"
-revisit_in_days = 40
+revisit_in_days = 46
 times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["backtracking", "recursion"]

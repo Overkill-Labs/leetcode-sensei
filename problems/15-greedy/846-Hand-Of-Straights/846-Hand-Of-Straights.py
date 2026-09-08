@@ -2,9 +2,9 @@
 https://leetcode.com/problems/hand-of-straights/
 '''
 
-last_solved     = "2026-09-05"
-revisit_in_days = 3
-times_reviewed  = 2
+last_solved     = "2026-09-08"
+revisit_in_days = 7
+times_reviewed  = 3
 difficulty      = "medium"
 topic_tags      = ["array", "hash-table", "greedy", "sorting"]
 

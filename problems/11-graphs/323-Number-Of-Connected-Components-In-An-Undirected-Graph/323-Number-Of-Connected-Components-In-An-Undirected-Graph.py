@@ -2,9 +2,9 @@
 https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/
 '''
 
-last_solved     = "2026-09-07"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-08"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["depth-first-search", "breadth-first-search", "union-find", "graph"]
 
