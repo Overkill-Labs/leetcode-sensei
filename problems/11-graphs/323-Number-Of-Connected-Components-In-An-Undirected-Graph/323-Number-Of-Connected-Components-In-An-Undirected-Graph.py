@@ -11,7 +11,7 @@ topic_tags      = ["depth-first-search", "breadth-first-search", "union-find", "
 class UnionFind:
 
     def __init__(self, size):
-        self.parent = [i for i in range(size)]
+        self.parent = [node for node in range(size)]
 
     def find(self, node):
         if self.parent[node] != node:
@@ -29,4 +29,9 @@ class Solution:
         for src, dest in edges:
             union_find.union(src, dest)
 
-        return len(set(union_find.find(i) for i in range(n)))
+        for node in range(n):
+            union_find.find(node)
+
+        return len(set(union_find.parent))
+        # Time: O((N + E) log N) — path compression without rank
+        # Space: O(N)
