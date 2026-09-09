@@ -2,49 +2,34 @@
 https://leetcode.com/problems/copy-list-with-random-pointer/
 '''
 
-last_solved     = "2026-07-26"
-revisit_in_days = 45
-times_reviewed  = 7
+last_solved     = "2026-09-09"
+revisit_in_days = 36
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["linked-list", "hash-map"]
 
 class Solution:
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
-        if not head:
-            return head
-            
-        orig_copy_d = {}
+        if not head: return head
 
-        copy_list = Node(head.val)
-        orig_copy_d[head] = copy_list
+        cpy_list = Node(head.val)
+        org_list = head
 
-        orig = head
-        copy = copy_list
+        lookup = {None: None}
 
-        while orig:
-            copy.val = orig.val
+        cpy, org = cpy_list, org_list
+        while org:
+            cpy.val = org.val
+            lookup[org] = cpy
+            if org.next:
+                cpy.next = Node(-1)
+            cpy, org = cpy.next, org.next
 
-            orig_copy_d[orig] = copy
+        cpy, org = cpy_list, org_list
+        while org:
+            cpy.random = lookup[org.random]
+            cpy, org = cpy.next, org.next
 
-            if orig.next is None:
-                copy.next = None
-            else:
-                if orig.next in orig_copy_d:
-                    copy.next = orig_copy_d[orig.next]
-                else:
-                    copy.next = Node(orig.next.val)
-                    orig_copy_d[orig.next] = copy.next
-            
-            if orig.random is None:
-                copy.random = None
-            else:
-                if orig.random in orig_copy_d:
-                    copy.random = orig_copy_d[orig.random]
-                else:
-                    copy.random = Node(orig.random.val)
-                    orig_copy_d[orig.random] = copy.random
-            
-            orig = orig.next
-            copy = copy.next
-
-        return copy_list
+        return cpy_list
+        # Time:  O(N) — two passes over the list
+        # Space: O(N) — lookup dict storing original -> copy mapping

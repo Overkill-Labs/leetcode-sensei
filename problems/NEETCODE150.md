@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **118 / 150**
+Total Completed: **120 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -113,7 +113,7 @@ Total Completed: **118 / 150**
 - [x] 210. Course Schedule II (Medium)
 - [x] 684. Redundant Connection (Medium)
 - [x] 323. Number of Connected Components in an Undirected Graph (Medium)
-- [ ] 261. Graph Valid Tree (Medium)
+- [x] 261. Graph Valid Tree (Medium)
 - [x] 127. Word Ladder (Hard)
 
 ## 12. Advanced Graphs
@@ -145,7 +145,7 @@ Total Completed: **118 / 150**
 - [x] 518. Coin Change II (Medium)
 - [x] 494. Target Sum (Medium)
 - [x] 97. Interleaving String (Medium)
-- [ ] 329. Longest Increasing Path in a Matrix (Hard)
+- [x] 329. Longest Increasing Path in a Matrix (Hard)
 - [x] 115. Distinct Subsequences (Hard)
 - [ ] 72. Edit Distance (Hard)
 - [ ] 312. Burst Balloons (Hard)
