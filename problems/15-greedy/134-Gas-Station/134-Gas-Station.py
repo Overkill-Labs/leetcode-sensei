@@ -2,9 +2,9 @@
 https://leetcode.com/problems/gas-station/
 '''
 
-last_solved     = "2026-09-04"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-11"
+revisit_in_days = 30
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "greedy"]
 
