@@ -2,11 +2,11 @@
 https://leetcode.com/problems/binary-tree-level-order-traversal/
 '''
 
-last_solved     = "2026-07-16"
-revisit_in_days = 60
+last_solved     = "2026-09-14"
+revisit_in_days = 45
 difficulty      = "medium"
 topic_tags      = ["trees", "bfs"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:

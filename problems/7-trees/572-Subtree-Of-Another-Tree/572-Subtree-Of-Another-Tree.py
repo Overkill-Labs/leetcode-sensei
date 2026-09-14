@@ -3,7 +3,7 @@ https://leetcode.com/problems/subtree-of-another-tree/
 '''
 
 last_solved     = "2026-08-07"
-revisit_in_days = 45
+revisit_in_days = 47
 difficulty      = "easy"
 topic_tags      = ["trees"]
 times_reviewed  = 6

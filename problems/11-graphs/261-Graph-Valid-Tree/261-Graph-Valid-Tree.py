@@ -2,9 +2,9 @@
 https://leetcode.com/problems/graph-valid-tree/
 '''
 
-last_solved     = "2026-09-09"
-revisit_in_days = 3
-times_reviewed  = 2
+last_solved     = "2026-09-14"
+revisit_in_days = 5
+times_reviewed  = 3
 difficulty      = "medium"
 topic_tags      = ["depth-first-search", "breadth-first-search", "union-find", "graph"]
 

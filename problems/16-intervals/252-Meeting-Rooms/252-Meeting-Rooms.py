@@ -3,7 +3,7 @@ https://leetcode.com/problems/meeting-rooms/
 '''
 
 last_solved     = "2026-08-30"
-revisit_in_days = 45
+revisit_in_days = 61
 difficulty      = "easy"
 topic_tags      = ["intervals"]
 times_reviewed  = 6

@@ -3,7 +3,7 @@ https://leetcode.com/problems/counting-bits/
 '''
 
 last_solved     = "2026-08-29"
-revisit_in_days = 46
+revisit_in_days = 66
 times_reviewed  = 5
 difficulty      = "easy"
 topic_tags      = ["dynamic-programming", "bit-manipulation"]

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/container-with-most-water/
 '''
 
-last_solved     = "2026-08-02"
-revisit_in_days = 43
-times_reviewed  = 8
+last_solved     = "2026-09-14"
+revisit_in_days = 90
+times_reviewed  = 9
 difficulty      = "medium"
 topic_tags      = ["two-pointers"]
 

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/word-ladder/
 '''
 
-last_solved     = "2026-09-06"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-14"
+revisit_in_days = 30
+times_reviewed  = 4
 difficulty      = "hard"
 topic_tags      = ["hash-table", "string", "breadth-first-search", "bidirectional-search"]
 
