@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **122 / 150**
+Total Completed: **123 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -136,7 +136,7 @@ Total Completed: **122 / 150**
 - [x] 152. Maximum Product Subarray (Medium)
 - [x] 139. Word Break (Medium)
 - [x] 300. Longest Increasing Subsequence (Medium)
-- [ ] 416. Partition Equal Subset Sum (Medium)
+- [x] 416. Partition Equal Subset Sum (Medium)
 
 ## 14. 2-D Dynamic Programming
 - [x] 62. Unique Paths (Medium)
