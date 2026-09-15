@@ -2,11 +2,11 @@
 https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 '''
 
-last_solved     = "2026-08-02"
-revisit_in_days = 44
+last_solved     = "2026-09-15"
+revisit_in_days = 42
 difficulty      = "easy"
 topic_tags      = ["sliding-window", "stock"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:

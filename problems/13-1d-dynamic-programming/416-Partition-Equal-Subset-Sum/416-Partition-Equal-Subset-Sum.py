@@ -2,9 +2,9 @@
 https://leetcode.com/problems/partition-equal-subset-sum/
 '''
 
-last_solved     = "2026-09-14"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-15"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["array", "dynamic-programming", "knapsack-problem", "0-1-knapsack"]
 

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/course-schedule-ii/
 '''
 
-last_solved     = "2026-09-01"
-revisit_in_days = 14
-times_reviewed  = 6
+last_solved     = "2026-09-15"
+revisit_in_days = 45
+times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["graphs", "topological-sort", "dfs"]
 
