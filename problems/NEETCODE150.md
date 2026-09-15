@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **123 / 150**
+Total Completed: **124 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -26,7 +26,7 @@ Total Completed: **123 / 150**
 - [x] 424. Longest Repeating Character Replacement (Medium)
 - [x] 567. Permutation in String (Medium)
 - [ ] 76. Minimum Window Substring (Hard)
-- [ ] 239. Sliding Window Maximum (Hard)
+- [x] 239. Sliding Window Maximum (Hard)
 
 ## 4. Stack
 - [x] 20. Valid Parentheses (Easy)
