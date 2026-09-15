@@ -2,9 +2,9 @@
 https://leetcode.com/problems/hand-of-straights/
 '''
 
-last_solved     = "2026-09-08"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-15"
+revisit_in_days = 30
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "hash-table", "greedy", "sorting"]
 
@@ -13,24 +13,19 @@ class Solution:
         if len(hand) % groupSize != 0:
             return False
 
-        counter = Counter(hand)
-        min_heap = list(counter.items())
-        heapq.heapify(min_heap)
+        hand_counter = Counter(hand)
+        hand_keys = sorted(hand_counter.keys())
 
-        while counter:
-            curr_min, _ = heapq.heappop(min_heap)
-            curr_cnt = counter[curr_min] - 1
+        for key in hand_keys:
+            cnt = hand_counter[key]
 
-            if curr_cnt >= 0:
-                heapq.heappush(min_heap, (curr_min, curr_cnt))
-
-                for num in range(curr_min, curr_min + groupSize):
-                    if num not in counter:
+            while cnt:
+                for i in range(groupSize):
+                    if hand_counter[key + i] < cnt:
                         return False
-                    counter[num] -= 1
-                    if not counter[num]:
-                        del counter[num]
+                    hand_counter[key + i] -= 1
+                cnt -= 1
 
         return True
-        # Time: O(N log N) — heap operations over unique keys
+        # Time: O(N log K) — sort over unique keys K, then O(N) traversal
         # Space: O(N)
