@@ -92,11 +92,14 @@ def write_file(path: str, content: str) -> None:
 def is_load_exempt(meta: dict) -> bool:
     """
     Problems exempt from the daily cap (do not count toward load):
-      - Struggled (s-rated): revisit_in_days == 1
+      - Struggled (s-rated): revisit_in_days == 1 day
+      - Hard (h-rated):      revisit_in_days <= 3 days
+      - Good (g-rated):      revisit_in_days <= 7 days
       - Brand-new problems:  times_reviewed <= 1
-    These can pile onto any day without triggering overload logic.
+    These are protected categories — they can pile onto any day without
+    triggering overload logic and are never escalated to a higher tier.
     """
-    return meta.get("revisit_in_days", 0) <= 1 or meta.get("times_reviewed", 0) <= 1
+    return meta.get("revisit_in_days", 0) <= 7 or meta.get("times_reviewed", 0) <= 1
 
 
 def get_all_due_dates(root: str, exclude_filepath: str = None) -> list:
@@ -137,9 +140,9 @@ HIGH_REVIEW_THRESHOLD = 5
 SMOOTH_OVERLOAD_CAP = DAILY_LOAD_CAP
 
 RATING_ESCALATION = {
-    "s": "h",
-    "h": "g",
-    "g": "e",
+    "s": None,   # protected — never escalated beyond 1 day
+    "h": None,   # protected — never escalated beyond 3 days
+    "g": None,   # protected — never escalated beyond 7 days
     "e": "t",
     "t": None,   # already at the top tier — no further escalation possible
 }
@@ -194,10 +197,11 @@ def compute_spread_interval(base_days: int, rating: str, today: date,
         if best_day is None:
             best_day = base_date
 
-        # Never escalate `s` — it must return tomorrow regardless of load.
-        # (If tomorrow is heavy, that's a scheduling problem; but the user
-        #  explicitly needs to re-review a struggled problem the next day.)
-        if effective_rating == "s":
+        # Never escalate s, h, or g — these are protected categories.
+        # s/h/g must stay within their defined windows regardless of load.
+        # (If those days are heavy, that's a scheduling problem, but the
+        #  memory priority of these ratings must not be overridden.)
+        if effective_rating in ("s", "h", "g"):
             break
 
         # If the best available day is still heavily loaded, escalate one tier

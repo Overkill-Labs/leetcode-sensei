@@ -516,10 +516,10 @@ class TestComputeSpreadIntervalEscalation:
         assert days >= 1
 
     def test_escalation_chain_is_correct(self):
-        """RATING_ESCALATION must follow s→h→g→e→t→None."""
-        assert RATING_ESCALATION["s"] == "h"
-        assert RATING_ESCALATION["h"] == "g"
-        assert RATING_ESCALATION["g"] == "e"
+        """s/h/g are protected — they never escalate.  Only e can escalate to t."""
+        assert RATING_ESCALATION["s"] is None   # protected: stays at 1 day
+        assert RATING_ESCALATION["h"] is None   # protected: stays at 3 days
+        assert RATING_ESCALATION["g"] is None   # protected: stays at 7 days
         assert RATING_ESCALATION["e"] == "t"
         assert RATING_ESCALATION["t"] is None
 
@@ -528,41 +528,37 @@ class TestComputeSpreadIntervalEscalation:
         from config import DAILY_LOAD_CAP
         assert SMOOTH_OVERLOAD_CAP == DAILY_LOAD_CAP
 
-    def test_escalation_triggered_when_all_days_overloaded(self):
-        """When every day in the 'g' window is loaded >= SMOOTH_OVERLOAD_CAP, escalate to 'e'."""
+    def test_no_escalation_from_g_even_when_overloaded(self):
+        """g is a protected rating — it must NOT escalate even when all nearby days are packed."""
         from datetime import date, timedelta
         today = date(2026, 6, 1)
-        # 'g' base=7d, spread (-2,+7) → days 5–14
-        # Note: 's' is explicitly exempt from escalation — use 'g' to test this behaviour
+        # Flood the entire 'g' spread window (days 5–14)
         overloaded_dates = []
         for delta in range(5, 15):
             overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
         days, effective = compute_spread_interval(7, "g", today, overloaded_dates, times_reviewed=0)
-        assert effective != "g", "expected escalation away from 'g'"
-        assert days > 7, "escalated interval should be larger than the base 7 days"
+        assert effective == "g", "g is protected and must never escalate"
 
-    def test_escalation_stops_at_trivial(self):
-        """Escalation never goes beyond 't' (top of chain)."""
+    def test_no_escalation_from_h_even_when_overloaded(self):
+        """h is a protected rating — it must NOT escalate even when all nearby days are packed."""
         from datetime import date, timedelta
         today = date(2026, 6, 1)
-        # Flood every day 1–99 to force escalation through g→e→t
+        # Flood the entire 'h' spread window (days 2–4)
         overloaded_dates = []
-        for delta in range(1, 100):
+        for delta in range(2, 5):
             overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
-        days, effective = compute_spread_interval(7, "g", today, overloaded_dates, times_reviewed=0)
-        assert effective == "t"
+        days, effective = compute_spread_interval(3, "h", today, overloaded_dates, times_reviewed=0)
+        assert effective == "h", "h is protected and must never escalate"
+
+    def test_escalation_only_applies_to_e_rating(self):
+        """e can escalate to t when every day in the e window is overloaded."""
+        from datetime import date, timedelta
+        today = date(2026, 6, 1)
+        # Flood the entire 'e' spread window (days 15–45)
+        overloaded_dates = []
+        for delta in range(15, 46):
+            overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
+        days, effective = compute_spread_interval(30, "e", today, overloaded_dates, times_reviewed=0)
+        assert effective == "t", "e should escalate to t when its window is fully packed"
         assert days >= 1
-
-    def test_returned_days_use_escalated_tier_base(self):
-        """Days returned after escalation are computed from the escalated tier's base, not original."""
-        from datetime import date, timedelta
-        today = date(2026, 6, 1)
-        # Flood 'g' window (days 5–14) to force escalation to 'e'
-        overloaded_dates = []
-        for delta in range(5, 15):
-            overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
-        days, effective = compute_spread_interval(7, "g", today, overloaded_dates, times_reviewed=0)
-        # e base is 30 days; spread window (-15,+15) → should land in 15–45 day range
-        assert effective == "e"
-        assert 15 <= days <= 45
 

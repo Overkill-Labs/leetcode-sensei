@@ -88,12 +88,14 @@ def collect_problems(root: str, today: date) -> list:
 
 def is_load_exempt(p: dict) -> bool:
     """
-    Problems exempt from the daily cap:
-      - Struggled (s-rated): interval == 1 day
-      - Brand-new problems:  times_reviewed <= 1
+    Problems exempt from displacement by rebalance:
+      - Struggled (s-rated): interval == 1 day   → must review tomorrow
+      - Hard (h-rated):      interval <= 3 days  → fragile memory, don't defer
+      - Good (g-rated):      interval <= 7 days  → still early in consolidation
+      - Brand-new problems:  times_reviewed <= 1 → too new to safely displace
     These are never displaced and don't count toward load.
     """
-    return p["interval"] <= 1 or p["times_reviewed"] <= 1
+    return p["interval"] <= 7 or p["times_reviewed"] <= 1
 
 
 def build_load_map(problems: list) -> dict:
