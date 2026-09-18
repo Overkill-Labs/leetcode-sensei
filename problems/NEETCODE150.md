@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **124 / 150**
+Total Completed: **125 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -175,7 +175,7 @@ Total Completed: **124 / 150**
 - [x] 48. Rotate Image (Medium)
 - [x] 202. Happy Number (Easy)
 - [x] 66. Plus One (Easy)
-- [ ] 172. Factorial Trailing Zeroes (Medium)
+- [x] 172. Factorial Trailing Zeroes (Medium)
 - [ ] 343. Integer Break (Medium)
 - [ ] 50. Pow(x, n) (Medium)
 
