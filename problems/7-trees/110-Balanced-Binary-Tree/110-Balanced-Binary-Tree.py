@@ -2,11 +2,11 @@
 https://leetcode.com/problems/balanced-binary-tree/
 '''
 
-last_solved     = "2026-08-03"
-revisit_in_days = 45
+last_solved     = "2026-09-17"
+revisit_in_days = 90
 difficulty      = "easy"
 topic_tags      = ["trees"]
-times_reviewed  = 7
+times_reviewed  = 8
 
 class Solution:
     def isBalanced(self, root: Optional[TreeNode]) -> bool:

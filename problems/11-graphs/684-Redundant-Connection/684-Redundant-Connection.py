@@ -2,9 +2,9 @@
 https://leetcode.com/problems/redundant-connection/
 '''
 
-last_solved     = "2026-09-10"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-17"
+revisit_in_days = 8
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["depth-first-search", "breadth-first-search", "union-find", "graph"]
 
