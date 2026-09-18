@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **125 / 150**
+Total Completed: **126 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -93,7 +93,7 @@ Total Completed: **125 / 150**
 - [x] 40. Combination Sum II (Medium)
 - [x] 79. Word Search (Medium)
 - [ ] 131. Palindrome Partitioning (Medium)
-- [ ] 17. Letter Combinations of a Phone Number (Medium)
+- [x] 17. Letter Combinations of a Phone Number (Medium)
 - [ ] 51. N-Queens (Hard)
 
 ## 10. Tries

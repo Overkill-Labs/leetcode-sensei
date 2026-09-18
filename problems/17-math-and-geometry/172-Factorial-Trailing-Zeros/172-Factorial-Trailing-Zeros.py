@@ -2,11 +2,11 @@
 https://leetcode.com/problems/factorial-trailing-zeroes/
 '''
 
-last_solved     = "2026-09-17"
+last_solved     = "2026-09-18"
 revisit_in_days = 1
 difficulty      = "medium"
 topic_tags      = ["math"]
-times_reviewed  = 0
+times_reviewed  = 1
 
 class Solution:
     def trailingZeroes(self, n: int) -> int:

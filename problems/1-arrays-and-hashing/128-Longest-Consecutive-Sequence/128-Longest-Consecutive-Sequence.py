@@ -2,9 +2,9 @@
 https://leetcode.com/problems/longest-consecutive-sequence/description/
 '''
 
-last_solved     = "2026-05-14"
-revisit_in_days = 127
-times_reviewed  = 6
+last_solved     = "2026-09-18"
+revisit_in_days = 90
+times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["arrays", "hashing"]
 
