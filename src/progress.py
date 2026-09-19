@@ -9,6 +9,7 @@ Usage:
 import json
 import os
 import re
+import subprocess
 import sys
 from datetime import date, timedelta
 
@@ -80,11 +81,40 @@ def _solved_numbers(problems_root):
     return solved, problems
 
 
-def _velocity(all_problems):
-    """Return problems solved per week based on the last 28 days."""
+def _velocity(problems_root):
+    """
+    Return NEW problems added to the curriculum per week, based on the last 28 days.
+
+    Deliberately uses git file-creation history rather than `last_solved`:
+    `last_solved` is bumped on every `sensei mark`, including reviews of
+    problems solved long ago, so counting it would conflate review throughput
+    with actual curriculum progress.
+    """
     today = date.today()
     cutoff = today - timedelta(days=28)
-    recent = sum(1 for p in all_problems if p["last_solved"] >= cutoff)
+    repo_root = os.path.dirname(problems_root)
+
+    try:
+        out = subprocess.run(
+            ["git", "log", "--diff-filter=A", "--name-only",
+             "--pretty=format:%ad", "--date=short", "--", "problems"],
+            cwd=repo_root, capture_output=True, text=True, check=True,
+        ).stdout
+    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
+        return None
+
+    date_re = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+    current_date = None
+    recent = 0
+    for line in out.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        if date_re.match(line):
+            current_date = date.fromisoformat(line)
+        elif line.endswith(".py") and current_date and current_date >= cutoff:
+            recent += 1
+
     return round(recent / 4, 1)
 
 
@@ -110,7 +140,7 @@ def main():
             print(f"\n{GREY}  {msg}{RESET}\n")
         sys.exit(1)
 
-    solved_nums, all_problems = _solved_numbers(problems_root)
+    solved_nums, _ = _solved_numbers(problems_root)
     today = date.today()
 
     # ── aggregate stats ───────────────────────────────────────────────────────
@@ -132,9 +162,9 @@ def main():
         t_solved = sum(1 for p in s["problems"] if p["number"] in solved_nums)
         by_topic.append({"topic": s["topic"], "done": t_solved, "total": t_total})
 
-    vel = _velocity(all_problems)
+    vel = _velocity(problems_root)
     remaining = total_problems - total_solved
-    if vel > 0:
+    if vel and vel > 0:
         weeks_left = remaining / vel
         projected_date = (today + timedelta(weeks=weeks_left)).isoformat()
         projected_weeks = round(weeks_left)
@@ -182,7 +212,8 @@ def main():
         colour = GREEN if done == total else (YELLOW if done > 0 else GREY)
         print(f"    {colour}{topic}{RESET}  {done:>2} / {total:<4}  {p2:>3}%  {bar}")
 
-    print(f"\n  {BOLD}Velocity:{RESET}    ~{vel} problems/week  (last 4 weeks)")
+    vel_str = f"~{vel}" if vel is not None else "N/A"
+    print(f"\n  {BOLD}Velocity:{RESET}    {vel_str} new problems/week  (last 4 weeks, by curriculum additions)")
     if projected_date:
         print(f"  {BOLD}Projected:{RESET}   ~{projected_weeks} weeks to completion  ({projected_date})")
     else:
