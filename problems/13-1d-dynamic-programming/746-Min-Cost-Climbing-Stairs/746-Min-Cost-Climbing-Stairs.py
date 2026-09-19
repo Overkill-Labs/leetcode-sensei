@@ -2,11 +2,11 @@
 https://leetcode.com/problems/min-cost-climbing-stairs/
 '''
 
-last_solved     = "2026-09-18"
-revisit_in_days = 1
+last_solved     = "2026-09-19"
+revisit_in_days = 90
 difficulty      = "easy"
 topic_tags      = ["dynamic-programming"]
-times_reviewed  = 7
+times_reviewed  = 8
 
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
