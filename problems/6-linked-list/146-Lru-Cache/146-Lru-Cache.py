@@ -2,9 +2,9 @@
 https://leetcode.com/problems/lru-cache/
 '''
 
-last_solved     = "2026-08-20"
-revisit_in_days = 30
-times_reviewed  = 4
+last_solved     = "2026-09-19"
+revisit_in_days = 47
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["linked-list", "hash-map", "design"]
 
