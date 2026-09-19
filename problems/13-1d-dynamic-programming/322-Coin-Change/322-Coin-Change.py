@@ -2,9 +2,9 @@
 https://leetcode.com/problems/coin-change/
 '''
 
-last_solved     = "2026-08-20"
-revisit_in_days = 30
-times_reviewed  = 4
+last_solved     = "2026-09-19"
+revisit_in_days = 46
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["dynamic-programming"]
 
