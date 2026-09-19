@@ -2,9 +2,9 @@
 https://leetcode.com/problems/letter-combinations-of-a-phone-number/
 '''
 
-last_solved     = "2026-09-18"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-19"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["hash-table", "string", "backtracking"]
 
