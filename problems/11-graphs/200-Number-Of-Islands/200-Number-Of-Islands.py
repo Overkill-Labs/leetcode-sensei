@@ -2,11 +2,11 @@
 https://leetcode.com/problems/number-of-islands/
 '''
 
-last_solved     = "2026-05-26"
-revisit_in_days = 117
+last_solved     = "2026-09-20"
+revisit_in_days = 45
 difficulty      = "medium"
 topic_tags      = ["graphs", "bfs"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 from collections import deque
 from typing import List

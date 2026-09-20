@@ -2,9 +2,9 @@
 https://leetcode.com/problems/implement-trie-prefix-tree/
 '''
 
-last_solved     = "2026-09-06"
-revisit_in_days = 14
-times_reviewed  = 7
+last_solved     = "2026-09-20"
+revisit_in_days = 43
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["trie"]
 

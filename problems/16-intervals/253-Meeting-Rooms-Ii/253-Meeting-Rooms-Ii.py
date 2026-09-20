@@ -2,9 +2,9 @@
 https://leetcode.com/problems/meeting-rooms-ii/
 '''
 
-last_solved     = "2026-09-19"
+last_solved     = "2026-09-20"
 revisit_in_days = 1
-times_reviewed  = 1
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["array", "two-pointers", "greedy", "sorting", "heap-priority-queue", "prefix-sum"]
 
