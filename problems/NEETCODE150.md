@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **128 / 150**
+Total Completed: **129 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -83,7 +83,7 @@ Total Completed: **128 / 150**
 - [x] 215. Kth Largest Element in an Array (Medium)
 - [x] 621. Task Scheduler (Medium)
 - [ ] 355. Design Twitter (Medium)
-- [ ] 295. Find Median from Data Stream (Hard)
+- [x] 295. Find Median from Data Stream (Hard)
 
 ## 9. Backtracking
 - [x] 78. Subsets (Medium)
