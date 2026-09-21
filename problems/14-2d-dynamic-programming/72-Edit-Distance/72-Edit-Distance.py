@@ -2,9 +2,9 @@
 https://leetcode.com/problems/edit-distance/
 '''
 
-last_solved     = "2026-09-14"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-21"
+revisit_in_days = 30
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["string", "dynamic-programming"]
 

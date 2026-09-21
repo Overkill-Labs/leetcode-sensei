@@ -2,11 +2,11 @@
 https://leetcode.com/problems/valid-palindrome/
 '''
 
-last_solved     = "2026-05-27"
-revisit_in_days = 117
+last_solved     = "2026-09-21"
+revisit_in_days = 90
 difficulty      = "easy"
 topic_tags      = ["two-pointers", "string"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 class Solution:
     def isPalindrome(self, s: str) -> bool:
@@ -20,9 +20,11 @@ class Solution:
                 right -= 1
                 continue
 
-            if s[left].lower() != s[right].lower():
-                return False
+            l_c, r_c = s[left].lower(), s[right].lower()
 
+            if l_c != r_c:
+                return False
+            
             left += 1
             right -= 1
         

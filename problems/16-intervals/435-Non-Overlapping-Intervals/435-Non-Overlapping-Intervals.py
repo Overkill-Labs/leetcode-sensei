@@ -2,9 +2,9 @@
 https://leetcode.com/problems/non-overlapping-intervals/
 '''
 
-last_solved     = "2026-09-20"
-revisit_in_days = 1
-times_reviewed  = 2
+last_solved     = "2026-09-21"
+revisit_in_days = 2
+times_reviewed  = 3
 difficulty      = "medium"
 topic_tags      = ["array", "dynamic-programming", "greedy", "sorting"]
 
