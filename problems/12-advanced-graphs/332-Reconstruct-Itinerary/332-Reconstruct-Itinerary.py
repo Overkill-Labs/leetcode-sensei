@@ -2,9 +2,9 @@
 https://leetcode.com/problems/reconstruct-itinerary/
 '''
 
-last_solved     = "2026-09-21"
-revisit_in_days = 1
-times_reviewed  = 4
+last_solved     = "2026-09-22"
+revisit_in_days = 4
+times_reviewed  = 5
 difficulty      = "hard"
 topic_tags      = ["array", "string", "depth-first-search", "graph", "sorting", "heap-priority-queue", "eulerian-circuit", "eulerian-path", "semi-eulerian-graph"]
 

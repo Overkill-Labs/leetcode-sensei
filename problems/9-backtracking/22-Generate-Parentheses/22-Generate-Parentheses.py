@@ -2,9 +2,9 @@
 https://leetcode.com/problems/generate-parentheses/
 '''
 
-last_solved     = "2026-08-02"
-revisit_in_days = 51
-times_reviewed  = 7
+last_solved     = "2026-09-22"
+revisit_in_days = 88
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["backtracking", "recursion"]
 

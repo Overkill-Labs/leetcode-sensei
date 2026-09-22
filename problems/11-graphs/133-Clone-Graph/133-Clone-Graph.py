@@ -2,9 +2,9 @@
 https://leetcode.com/problems/clone-graph/
 '''
 
-last_solved     = "2026-08-08"
-revisit_in_days = 45
-times_reviewed  = 7
+last_solved     = "2026-09-22"
+revisit_in_days = 90
+times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["graphs", "dfs", "bfs", "hash-map"]
 

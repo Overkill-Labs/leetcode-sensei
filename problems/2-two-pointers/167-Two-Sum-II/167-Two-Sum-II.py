@@ -2,11 +2,11 @@
 https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/
 '''
 
-last_solved     = "2026-05-28"
-revisit_in_days = 117
+last_solved     = "2026-09-22"
+revisit_in_days = 45
 difficulty      = "medium"
 topic_tags      = ["two-pointers", "array"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 class Solution:
     def twoSum(self, numbers: List[int], target: int) -> List[int]:

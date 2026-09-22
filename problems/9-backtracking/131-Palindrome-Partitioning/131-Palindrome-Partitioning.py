@@ -2,9 +2,9 @@
 https://leetcode.com/problems/palindrome-partitioning/description/
 '''
 
-last_solved     = "2026-09-21"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-22"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["backtracking", "recursion"]
 
