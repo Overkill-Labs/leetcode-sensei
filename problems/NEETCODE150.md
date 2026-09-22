@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **129 / 150**
+Total Completed: **131 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -92,7 +92,7 @@ Total Completed: **129 / 150**
 - [x] 90. Subsets II (Medium)
 - [x] 40. Combination Sum II (Medium)
 - [x] 79. Word Search (Medium)
-- [ ] 131. Palindrome Partitioning (Medium)
+- [x] 131. Palindrome Partitioning (Medium)
 - [x] 17. Letter Combinations of a Phone Number (Medium)
 - [ ] 51. N-Queens (Hard)
 
@@ -157,7 +157,7 @@ Total Completed: **129 / 150**
 - [x] 45. Jump Game II (Medium)
 - [x] 134. Gas Station (Medium)
 - [x] 846. Hand of Straights (Medium)
-- [ ] 1899. Merge Triplets to Form Target Triplet (Medium)
+- [x] 1899. Merge Triplets to Form Target Triplet (Medium)
 - [ ] 763. Partition Labels (Medium)
 - [ ] 678. Valid Parenthesis String (Medium)
 
