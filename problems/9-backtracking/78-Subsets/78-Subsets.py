@@ -3,7 +3,7 @@ https://leetcode.com/problems/subsets/
 '''
 
 last_solved     = "2026-07-01"
-revisit_in_days = 90
+revisit_in_days = 134
 difficulty      = "medium"
 topic_tags      = ["backtracking"]
 times_reviewed  = 5

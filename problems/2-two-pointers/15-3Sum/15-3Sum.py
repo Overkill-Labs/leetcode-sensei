@@ -3,7 +3,7 @@ https://leetcode.com/problems/3sum/
 '''
 
 last_solved     = "2026-07-01"
-revisit_in_days = 89
+revisit_in_days = 123
 difficulty      = "medium"
 topic_tags      = ["two-pointers", "array"]
 times_reviewed  = 5
