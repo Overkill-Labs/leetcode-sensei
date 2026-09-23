@@ -2,11 +2,11 @@
 https://leetcode.com/problems/subtree-of-another-tree/
 '''
 
-last_solved     = "2026-08-07"
-revisit_in_days = 47
+last_solved     = "2026-09-23"
+revisit_in_days = 90
 difficulty      = "easy"
 topic_tags      = ["trees"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 class Solution:
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:

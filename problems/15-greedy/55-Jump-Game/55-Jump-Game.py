@@ -2,9 +2,9 @@
 https://leetcode.com/problems/jump-game/
 '''
 
-last_solved     = "2026-08-24"
-revisit_in_days = 30
-times_reviewed  = 4
+last_solved     = "2026-09-23"
+revisit_in_days = 45
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["greedy"]
 

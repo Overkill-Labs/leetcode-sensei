@@ -2,9 +2,9 @@
 https://leetcode.com/problems/find-median-from-data-stream/
 '''
 
-last_solved     = "2026-09-21"
-revisit_in_days = 2
-times_reviewed  = 2
+last_solved     = "2026-09-23"
+revisit_in_days = 5
+times_reviewed  = 3
 difficulty      = "hard"
 topic_tags      = ["heap"]
 

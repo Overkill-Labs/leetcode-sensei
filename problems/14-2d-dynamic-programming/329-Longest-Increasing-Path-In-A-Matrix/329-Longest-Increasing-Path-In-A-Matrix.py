@@ -2,9 +2,9 @@
 https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 '''
 
-last_solved     = "2026-09-21"
-revisit_in_days = 2
-times_reviewed  = 4
+last_solved     = "2026-09-23"
+revisit_in_days = 33
+times_reviewed  = 5
 difficulty      = "hard"
 topic_tags      = ["array", "dynamic-programming", "depth-first-search", "breadth-first-search", "graph", "topological-sort", "memoization", "matrix", "directed-acyclic-graph"]
 
