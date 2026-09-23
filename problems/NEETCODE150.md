@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **131 / 150**
+Total Completed: **132 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -158,7 +158,7 @@ Total Completed: **131 / 150**
 - [x] 134. Gas Station (Medium)
 - [x] 846. Hand of Straights (Medium)
 - [x] 1899. Merge Triplets to Form Target Triplet (Medium)
-- [ ] 763. Partition Labels (Medium)
+- [x] 763. Partition Labels (Medium)
 - [ ] 678. Valid Parenthesis String (Medium)
 
 ## 16. Intervals
