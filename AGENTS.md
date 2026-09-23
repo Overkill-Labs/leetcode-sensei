@@ -1102,7 +1102,9 @@ Rating `s` (1 day) on review #3 is fine — 1 < 30, no capping occurs.
 
 Tie-breaking: problems with `times_reviewed < 5` prefer the EARLIEST minimum-load day (fragile memory, keep close). Problems with `times_reviewed >= 5` prefer the LATEST (stable memory, safe to defer out of clusters).
 
-Use `--no-spread` to skip smoothing and get the exact base interval.
+Every rating searches only its own fixed window above — there is no escalation to a wider tier. Only `s` and `h` are exempt from the daily cap (their interval always falls at or under `LOAD_EXEMPT_MAX_INTERVAL`, currently 4 days); `g`, `e`, and `t` all count toward it. If the least-loaded day within a non-exempt rating's window is still at or over the daily cap once this problem lands there, `sensei mark` evicts the most-reviewed *other* problem already on that day (the just-marked problem itself is never evicted) to the nearest lower-load day — the same displacement rule `sensei rebalance` uses.
+
+Use `--no-spread` to skip smoothing (and the hard-cap eviction pass) and get the exact base interval.
 
 ---
 
@@ -1111,10 +1113,10 @@ Use `--no-spread` to skip smoothing and get the exact base interval.
 ```bash
 sensei rebalance           # dry run — preview only
 sensei rebalance --apply   # write changes to disk
-sensei rebalance --cap 4   # flag days with more than 4 reviews
+sensei rebalance --cap 5   # flag days with more than 5 reviews
 ```
 
-Default cap is `DAILY_LOAD_CAP` from `src/config.py` (currently 4). Change it there to adjust both rebalance and per-mark load smoothing simultaneously.
+Default cap is `DAILY_LOAD_CAP` from `src/config.py` (currently **3**, hard-capped). Override it via the `DAILY_LOAD_CAP` environment variable — set in the project's `.env` file — rather than editing the source. Changing it adjusts both rebalance and per-mark load smoothing/eviction simultaneously.
 
 Use when large clusters exist after a period of intense new-problem addition.
 
