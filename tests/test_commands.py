@@ -24,9 +24,10 @@ from mark import (
     compute_interval,
     update_metadata,
     compute_spread_interval,
-    SMOOTH_OVERLOAD_CAP,
-    RATING_ESCALATION,
+    is_load_exempt,
+    enforce_daily_cap,
 )
+from config import DAILY_LOAD_CAP, LOAD_EXEMPT_MAX_INTERVAL
 
 
 class TestSenseiInit:
@@ -222,6 +223,100 @@ class TestSenseiMark:
         
         assert result.returncode == 1
         assert "not found" in result.stdout
+
+
+class TestEnforceDailyCap:
+    """
+    Once a rating is non-exempt (g/e/t), it must respect the daily cap.
+    Overflow is resolved by evicting the most-reviewed OTHER problem on that
+    day (never the one just marked) to the nearest lower-load day.
+    """
+
+    def _write_problem(self, root: Path, name: str, number: int, last_solved: str,
+                       revisit_in_days: int, times_reviewed: int) -> Path:
+        problem_dir = root / "problems" / "99-scratch" / f"{number}-{name}"
+        problem_dir.mkdir(parents=True)
+        f = problem_dir / f"{number}-{name}.py"
+        f.write_text(f'''\'\'\'
+https://leetcode.com/problems/{name.lower()}/
+\'\'\'
+
+last_solved     = "{last_solved}"
+revisit_in_days = {revisit_in_days}
+times_reviewed  = {times_reviewed}
+difficulty      = "medium"
+topic_tags      = ["scratch"]
+
+class Solution:
+    def solve(self):
+        pass
+''')
+        return f
+
+    def test_evicts_most_reviewed_other_problem_when_over_cap(self, initialized_workspace):
+        from datetime import date, timedelta
+        today       = date.today()
+        target_date = today + timedelta(days=10)
+        last_solved = (target_date - timedelta(days=10)).isoformat()
+        root        = str(initialized_workspace / "problems")
+
+        a = self._write_problem(initialized_workspace, "A", 1, last_solved, 10, times_reviewed=5)
+        b = self._write_problem(initialized_workspace, "B", 2, last_solved, 10, times_reviewed=3)
+        c = self._write_problem(initialized_workspace, "C", 3, last_solved, 10, times_reviewed=2)
+        d = self._write_problem(initialized_workspace, "D", 4, last_solved, 10, times_reviewed=1)
+
+        # 4 non-exempt problems on target_date, cap=3 → exactly one must move.
+        # "D" stands in for the problem that was just marked — never evicted.
+        evictions = enforce_daily_cap(root, today, target_date, exclude_filepath=str(d), cap=3)
+
+        assert len(evictions) == 1
+        assert evictions[0]["label"] == "1. A"  # highest times_reviewed → displaced first
+
+        # A's file now points elsewhere
+        from utils import parse_metadata
+        a_meta = parse_metadata(str(a))
+        a_due  = a_meta["last_solved"] + timedelta(days=a_meta["revisit_in_days"])
+        assert a_due != target_date
+
+        # B, C, D are untouched and still on target_date
+        for f in (b, c, d):
+            meta = parse_metadata(str(f))
+            assert meta["last_solved"] + timedelta(days=meta["revisit_in_days"]) == target_date
+
+    def test_no_eviction_when_under_cap(self, initialized_workspace):
+        from datetime import date, timedelta
+        today       = date.today()
+        target_date = today + timedelta(days=10)
+        last_solved = (target_date - timedelta(days=10)).isoformat()
+        root        = str(initialized_workspace / "problems")
+
+        a = self._write_problem(initialized_workspace, "A", 1, last_solved, 10, times_reviewed=5)
+        b = self._write_problem(initialized_workspace, "B", 2, last_solved, 10, times_reviewed=3)
+
+        evictions = enforce_daily_cap(root, today, target_date, exclude_filepath=str(b), cap=3)
+        assert evictions == []
+
+    def test_exempt_problems_on_the_day_are_never_evicted(self, initialized_workspace):
+        """An s-rated (1-day interval) problem sharing the target day must never be displaced."""
+        from datetime import date, timedelta
+        today       = date.today()
+        target_date = today + timedelta(days=10)
+        last_solved = (target_date - timedelta(days=10)).isoformat()
+        root        = str(initialized_workspace / "problems")
+
+        # Exempt (interval <= 4) — should never be touched or counted.
+        exempt = self._write_problem(initialized_workspace, "Exempt", 1, target_date.isoformat(), 0, times_reviewed=10)
+        a = self._write_problem(initialized_workspace, "A", 2, last_solved, 10, times_reviewed=5)
+        b = self._write_problem(initialized_workspace, "B", 3, last_solved, 10, times_reviewed=3)
+        c = self._write_problem(initialized_workspace, "C", 4, last_solved, 10, times_reviewed=2)
+        d = self._write_problem(initialized_workspace, "D", 5, last_solved, 10, times_reviewed=1)
+
+        evictions = enforce_daily_cap(root, today, target_date, exclude_filepath=str(d), cap=3)
+
+        assert all(e["label"] != "1. Exempt" for e in evictions)
+        from utils import parse_metadata
+        exempt_meta = parse_metadata(str(exempt))
+        assert exempt_meta["last_solved"] + timedelta(days=exempt_meta["revisit_in_days"]) == target_date
 
 
 class TestComputeInterval:
@@ -499,66 +594,88 @@ topic_tags      = ["arrays"]
         assert "times_reviewed  = 5" in updated
 
 
-class TestComputeSpreadIntervalEscalation:
-    """Test auto-escalation in compute_spread_interval when all nearby days are overloaded."""
+class TestComputeSpreadInterval:
+    """
+    compute_spread_interval no longer escalates ratings to a wider tier.
+    Every rating searches its own fixed window and returns a plain interval
+    (int, not a tuple) — overflow past the daily cap is handled afterward by
+    enforce_daily_cap's eviction pass, not by widening the search here.
+    """
 
-    def _make_due_dates(self, target_date, count):
-        """Return a list of `count` copies of target_date to simulate an overloaded day."""
-        return [target_date] * count
-
-    def test_no_escalation_when_free_day_exists(self):
-        """If a free day is available in the spread window, no escalation happens."""
-        from datetime import date, timedelta
+    def test_returns_int_not_tuple(self):
+        from datetime import date
         today = date(2026, 6, 1)
-        # No competing due dates — plenty of room
-        days, effective = compute_spread_interval(1, "s", today, [], times_reviewed=0)
-        assert effective == "s"
+        days = compute_spread_interval(1, "s", today, [], times_reviewed=0)
+        assert isinstance(days, int)
         assert days >= 1
 
-    def test_escalation_chain_is_correct(self):
-        """s/h/g are protected — they never escalate.  Only e can escalate to t."""
-        assert RATING_ESCALATION["s"] is None   # protected: stays at 1 day
-        assert RATING_ESCALATION["h"] is None   # protected: stays at 3 days
-        assert RATING_ESCALATION["g"] is None   # protected: stays at 7 days
-        assert RATING_ESCALATION["e"] == "t"
-        assert RATING_ESCALATION["t"] is None
+    def test_no_competing_dates_lands_on_base_day(self):
+        from datetime import date
+        today = date(2026, 6, 1)
+        days = compute_spread_interval(7, "g", today, [], times_reviewed=0)
+        assert 5 <= days <= 14  # g's window is base(7) - 2 .. base(7) + 7
 
-    def test_smooth_overload_cap_constant(self):
-        """SMOOTH_OVERLOAD_CAP must equal DAILY_LOAD_CAP from config."""
-        from config import DAILY_LOAD_CAP
-        assert SMOOTH_OVERLOAD_CAP == DAILY_LOAD_CAP
-
-    def test_no_escalation_from_g_even_when_overloaded(self):
-        """g is a protected rating — it must NOT escalate even when all nearby days are packed."""
+    def test_stays_within_window_even_when_fully_packed(self):
+        """
+        Regardless of rating, if every day in the window is packed, the
+        search still returns a day inside that same window — it never
+        widens to a different rating's window. (Overflow is resolved by
+        eviction elsewhere, not by escalating here.)
+        """
         from datetime import date, timedelta
         today = date(2026, 6, 1)
-        # Flood the entire 'g' spread window (days 5–14)
         overloaded_dates = []
-        for delta in range(5, 15):
-            overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
-        days, effective = compute_spread_interval(7, "g", today, overloaded_dates, times_reviewed=0)
-        assert effective == "g", "g is protected and must never escalate"
+        for delta in range(5, 15):  # g's full window
+            overloaded_dates.extend([today + timedelta(days=delta)] * (DAILY_LOAD_CAP + 5))
+        days = compute_spread_interval(7, "g", today, overloaded_dates, times_reviewed=0)
+        assert 5 <= days <= 14, "g must stay in its own window even when every day is packed"
 
-    def test_no_escalation_from_h_even_when_overloaded(self):
-        """h is a protected rating — it must NOT escalate even when all nearby days are packed."""
-        from datetime import date, timedelta
+    def test_h_window_bounds(self):
+        from datetime import date
         today = date(2026, 6, 1)
-        # Flood the entire 'h' spread window (days 2–4)
-        overloaded_dates = []
-        for delta in range(2, 5):
-            overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
-        days, effective = compute_spread_interval(3, "h", today, overloaded_dates, times_reviewed=0)
-        assert effective == "h", "h is protected and must never escalate"
+        days = compute_spread_interval(3, "h", today, [], times_reviewed=0)
+        assert 2 <= days <= 4
 
-    def test_escalation_only_applies_to_e_rating(self):
-        """e can escalate to t when every day in the e window is overloaded."""
-        from datetime import date, timedelta
+    def test_e_window_bounds(self):
+        from datetime import date
         today = date(2026, 6, 1)
-        # Flood the entire 'e' spread window (days 15–45)
-        overloaded_dates = []
-        for delta in range(15, 46):
-            overloaded_dates.extend([today + timedelta(days=delta)] * SMOOTH_OVERLOAD_CAP)
-        days, effective = compute_spread_interval(30, "e", today, overloaded_dates, times_reviewed=0)
-        assert effective == "t", "e should escalate to t when its window is fully packed"
-        assert days >= 1
+        days = compute_spread_interval(30, "e", today, [], times_reviewed=0)
+        assert 15 <= days <= 45
+
+
+class TestLoadExemption:
+    """
+    Only s (1 day) and h (2-4 days) are exempt from the daily cap.
+    g/e/t, and progression-gated new problems whose interval has climbed
+    past LOAD_EXEMPT_MAX_INTERVAL, all count toward load.
+    """
+
+    def test_exempt_threshold_matches_h_window(self):
+        assert LOAD_EXEMPT_MAX_INTERVAL == 4
+
+    def test_struggled_interval_is_exempt(self):
+        assert is_load_exempt({"revisit_in_days": 1}) is True
+
+    def test_hard_interval_is_exempt(self):
+        assert is_load_exempt({"revisit_in_days": 4}) is True
+
+    def test_good_interval_is_not_exempt(self):
+        assert is_load_exempt({"revisit_in_days": 5}) is False
+        assert is_load_exempt({"revisit_in_days": 7}) is False
+
+    def test_easy_interval_is_not_exempt(self):
+        assert is_load_exempt({"revisit_in_days": 30}) is False
+
+    def test_trivial_interval_is_not_exempt(self):
+        assert is_load_exempt({"revisit_in_days": 90}) is False
+
+    def test_brand_new_problem_no_longer_gets_a_free_pass_purely_by_review_count(self):
+        """
+        The old rule exempted anything with times_reviewed <= 1 regardless of
+        interval. That's gone — exemption is interval-only now. A hypothetical
+        brand-new problem with a long interval (shouldn't happen given the
+        progression gate, but is_load_exempt itself no longer checks this)
+        is not exempt.
+        """
+        assert is_load_exempt({"revisit_in_days": 30, "times_reviewed": 0}) is False
 
