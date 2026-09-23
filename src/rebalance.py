@@ -25,7 +25,7 @@ import sys
 from datetime import date, timedelta
 
 from utils import find_solution_files, parse_metadata, SKIP_DIRS
-from config import DAILY_LOAD_CAP
+from config import DAILY_LOAD_CAP, LOAD_EXEMPT_MAX_INTERVAL
 
 # ── ANSI colours ──────────────────────────────────────────────────────────────
 GREEN  = "\033[92m"
@@ -89,13 +89,13 @@ def collect_problems(root: str, today: date) -> list:
 def is_load_exempt(p: dict) -> bool:
     """
     Problems exempt from displacement by rebalance:
-      - Struggled (s-rated): interval == 1 day   → must review tomorrow
-      - Hard (h-rated):      interval <= 3 days  → fragile memory, don't defer
-      - Good (g-rated):      interval <= 7 days  → still early in consolidation
-      - Brand-new problems:  times_reviewed <= 1 → too new to safely displace
-    These are never displaced and don't count toward load.
+      - Struggled (s-rated): interval == 1 day        → must review tomorrow
+      - Hard (h-rated):      interval <= 4 days        → fragile memory, don't defer
+    Only s and h are protected. Good/Easy/Trivial ratings (and progression-gated
+    new problems whose interval has climbed past LOAD_EXEMPT_MAX_INTERVAL) count
+    toward load and can be displaced like anything else.
     """
-    return p["interval"] <= 7 or p["times_reviewed"] <= 1
+    return p["interval"] <= LOAD_EXEMPT_MAX_INTERVAL
 
 
 def build_load_map(problems: list) -> dict:

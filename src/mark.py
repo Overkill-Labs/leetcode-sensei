@@ -15,7 +15,7 @@ import sys
 from datetime import date, timedelta
 
 from utils import find_solution_files, find_match, parse_metadata
-from config import DAILY_LOAD_CAP
+from config import DAILY_LOAD_CAP, LOAD_EXEMPT_MAX_INTERVAL
 
 # ── ANSI colours ──────────────────────────────────────────────────────────────
 GREEN  = "\033[92m"
@@ -93,13 +93,12 @@ def is_load_exempt(meta: dict) -> bool:
     """
     Problems exempt from the daily cap (do not count toward load):
       - Struggled (s-rated): revisit_in_days == 1 day
-      - Hard (h-rated):      revisit_in_days <= 3 days
-      - Good (g-rated):      revisit_in_days <= 7 days
-      - Brand-new problems:  times_reviewed <= 1
-    These are protected categories — they can pile onto any day without
-    triggering overload logic and are never escalated to a higher tier.
+      - Hard (h-rated):      revisit_in_days <= 4 days
+    Only s and h are protected. Good/Easy/Trivial (and progression-gated new
+    problems whose interval has climbed past the threshold) count toward the
+    cap and can be evicted from an overloaded day like anything else.
     """
-    return meta.get("revisit_in_days", 0) <= 7 or meta.get("times_reviewed", 0) <= 1
+    return meta.get("revisit_in_days", 0) <= LOAD_EXEMPT_MAX_INTERVAL
 
 
 def get_all_due_dates(root: str, exclude_filepath: str = None) -> list:
@@ -127,36 +126,18 @@ def get_all_due_dates(root: str, exclude_filepath: str = None) -> list:
 # earliest minimum-load day; high-reviewed problems prefer the latest.
 HIGH_REVIEW_THRESHOLD = 5
 
-# ── Smooth-overload escalation ────────────────────────────────────────────────
-# If the minimum-load day found within a rating's spread window already has
-# this many (or more) reviews, the spread window is considered "impossible"
-# and the rating is automatically escalated one tier so the problem lands on
-# a quieter day further out.
-#
-# Escalation chain:  s → h → g → e → t  (each step doubles or more the interval)
-#
-# Example: rating=s (1 day) but tomorrow has 8 reviews → try h (3 days window).
-#          If that window is also packed → try g (7 days), etc.
-SMOOTH_OVERLOAD_CAP = DAILY_LOAD_CAP
-
-RATING_ESCALATION = {
-    "s": None,   # protected — never escalated beyond 1 day
-    "h": None,   # protected — never escalated beyond 3 days
-    "g": None,   # protected — never escalated beyond 7 days
-    "e": "t",
-    "t": None,   # already at the top tier — no further escalation possible
-}
-
 
 def compute_spread_interval(base_days: int, rating: str, today: date,
-                            all_due_dates: list, times_reviewed: int = 0) -> tuple:
+                            all_due_dates: list, times_reviewed: int = 0) -> int:
     """
     Within the spread window for this rating, find the day with the fewest
-    already-scheduled reviews and return (interval_from_today, effective_rating).
+    already-scheduled reviews and return the interval (days from today).
 
-    If every candidate day in the window has >= SMOOTH_OVERLOAD_CAP reviews,
-    the rating is escalated one tier (s→h→g→e→t) and the search is retried.
-    The returned effective_rating reflects any escalation that occurred.
+    Every rating searches its own fixed window — there is no escalation to a
+    wider tier. If the least-loaded day in the window still exceeds the daily
+    cap, that overflow is resolved afterward by evicting the most-reviewed
+    problem already on that day (see enforce_daily_cap), not by pushing this
+    rating further out.
 
     Tie-breaking is biased by times_reviewed:
       - Low review count  (< HIGH_REVIEW_THRESHOLD): prefer EARLIEST minimum day
@@ -166,54 +147,94 @@ def compute_spread_interval(base_days: int, rating: str, today: date,
 
     Early exit if a zero-load day is found.
     """
-    effective_rating = rating
+    lo, hi = SPREAD_WINDOW[rating]
+    base_date = today + timedelta(days=base_days)
 
-    while True:
-        lo, hi = SPREAD_WINDOW[effective_rating]
-        # Recompute base_date from the effective tier's base interval each loop
-        tier_base_days = RATING_MAP[effective_rating][0]
-        base_date = today + timedelta(days=tier_base_days)
+    prefer_late = times_reviewed >= HIGH_REVIEW_THRESHOLD
 
-        prefer_late = times_reviewed >= HIGH_REVIEW_THRESHOLD
+    # Build candidate list in preference order based on review count
+    offsets = range(lo, hi + 1) if not prefer_late else range(hi, lo - 1, -1)
 
-        # Build candidate list in preference order based on review count
-        offsets = range(lo, hi + 1) if not prefer_late else range(hi, lo - 1, -1)
+    best_day  = None
+    best_load = float("inf")
 
-        best_day  = None
-        best_load = float("inf")
+    for offset in offsets:
+        candidate = base_date + timedelta(days=offset)
+        if candidate <= today:
+            continue
+        load = sum(1 for d in all_due_dates if d == candidate)
+        if load < best_load:
+            best_load = load
+            best_day  = candidate
+            if best_load == 0:
+                break  # can't do better than a fully free day
 
-        for offset in offsets:
-            candidate = base_date + timedelta(days=offset)
-            if candidate <= today:
-                continue
-            load = sum(1 for d in all_due_dates if d == candidate)
-            if load < best_load:
-                best_load = load
-                best_day  = candidate
-                if best_load == 0:
-                    break  # can't do better than a fully free day
+    # Fallback: if every candidate was in the past (shouldn't happen normally)
+    if best_day is None:
+        best_day = base_date
 
-        # Fallback: if every candidate was in the past (shouldn't happen normally)
-        if best_day is None:
-            best_day = base_date
+    return (best_day - today).days
 
-        # Never escalate s, h, or g — these are protected categories.
-        # s/h/g must stay within their defined windows regardless of load.
-        # (If those days are heavy, that's a scheduling problem, but the
-        #  memory priority of these ratings must not be overridden.)
-        if effective_rating in ("s", "h", "g"):
+
+def enforce_daily_cap(root: str, today: date, target_date: date,
+                      exclude_filepath: str, cap: int) -> list:
+    """
+    After a mark lands on target_date, make sure that day doesn't exceed the
+    daily cap.  If it does, evict non-exempt problems already scheduled there
+    (most-reviewed first — same "most stable memory, safest to defer" rule as
+    `sensei rebalance`) to the nearest lower-load day, until the day is back
+    at or under cap.
+
+    The problem that was just marked (exclude_filepath) is never evicted by
+    this pass — it earned its spot; anything displaced is an older problem
+    that happened to already live on that day.
+
+    Returns a list of eviction records (empty if nothing needed to move).
+    """
+    from rebalance import collect_problems, is_load_exempt as _rebalance_exempt
+    from rebalance import find_best_date, update_problem_due_date as _update_due_date
+
+    problems = collect_problems(root, today)
+
+    load_map = {}
+    for p in problems:
+        if not _rebalance_exempt(p):
+            load_map[p["due_date"]] = load_map.get(p["due_date"], 0) + 1
+
+    evictions = []
+    if load_map.get(target_date, 0) <= cap:
+        return evictions
+
+    day_problems = [
+        p for p in problems
+        if p["due_date"] == target_date
+        and os.path.abspath(p["filepath"]) != os.path.abspath(exclude_filepath)
+        and not _rebalance_exempt(p)
+    ]
+    day_problems.sort(key=lambda p: (p["times_reviewed"], p["interval"]), reverse=True)
+
+    for p in day_problems:
+        if load_map.get(target_date, 0) <= cap:
             break
 
-        # If the best available day is still heavily loaded, escalate one tier
-        if best_load >= SMOOTH_OVERLOAD_CAP:
-            next_rating = RATING_ESCALATION.get(effective_rating)
-            if next_rating is not None:
-                effective_rating = next_rating
-                continue  # retry with the escalated tier's wider window
+        best = find_best_date(p["due_date"], p["interval"], today, load_map,
+                              exclude_date=p["due_date"], cap=cap)
+        if best is None:
+            continue
 
-        break  # found a reasonable day, or already at the top tier (t)
+        _update_due_date(p["filepath"], best, p["last_solved"])
 
-    return (best_day - today).days, effective_rating
+        load_map[target_date] -= 1
+        load_map[best] = load_map.get(best, 0) + 1
+
+        evictions.append({
+            "label":          p["label"],
+            "from":           target_date.isoformat(),
+            "to":             best.isoformat(),
+            "times_reviewed": p["times_reviewed"],
+        })
+
+    return evictions
 
 
 def compute_interval(rating: str) -> int:
@@ -362,22 +383,13 @@ def main() -> None:
     if no_spread:
         actual_days    = base_days
         spread_note    = ""
-        effective_rating = rating_key
     else:
         all_due_dates = get_all_due_dates(root, exclude_filepath=match)
-        actual_days, effective_rating = compute_spread_interval(
+        actual_days = compute_spread_interval(
             base_days, rating_key, today, all_due_dates,
             times_reviewed=cur_times_reviewed,
         )
-        if effective_rating != rating_key:
-            # Rating was auto-escalated because every nearby day was overloaded
-            _, orig_label = RATING_MAP[rating_key]
-            _, esc_label  = RATING_MAP[effective_rating]
-            spread_note = (
-                f" {YELLOW}(overloaded — escalated {rating_key}→{effective_rating}, "
-                f"{actual_days}d){RESET}"
-            )
-        elif actual_days != base_days:
+        if actual_days != base_days:
             spread_note = f" {GREY}(spread from {base_days}d){RESET}"
         else:
             spread_note = ""
@@ -399,14 +411,34 @@ def main() -> None:
 
     print(f"\n  {GREEN}[OK]{RESET}  Marked as solved today ({today_str}) - next review in {BOLD}{days} days{RESET}{spread_note}\n")
 
+    # ── Hard daily cap enforcement ──────────────────────────────────────────────
+    # s/h are exempt (interval <= LOAD_EXEMPT_MAX_INTERVAL) and never trigger or
+    # suffer eviction. Everything else (g/e/t, and progression-gated new
+    # problems whose interval climbed past the threshold) must respect
+    # DAILY_LOAD_CAP — if landing here pushes the day over cap, the
+    # most-reviewed *other* problem on that day is displaced instead.
+    if actual_days > LOAD_EXEMPT_MAX_INTERVAL:
+        target_date = today + timedelta(days=actual_days)
+        evictions = enforce_daily_cap(root, today, target_date, match, DAILY_LOAD_CAP)
+        if evictions:
+            print(
+                f"  {YELLOW}⚠  Daily cap ({DAILY_LOAD_CAP}) enforced on {target_date}"
+                f"{RESET} — displaced:"
+            )
+            for e in evictions:
+                print(
+                    f"     {GREY}{e['label']} moved {e['from']} → "
+                    f"{CYAN}{e['to']}{RESET} {GREY}({e['times_reviewed']}x reviewed){RESET}"
+                )
+            print()
+
     # ── Schedule health check ──────────────────────────────────────────────────
-    # After each mark, scan for overloaded days (> HEALTH_CAP reviews).
-    # If clusters exist, print a one-line warning so the user knows to rebalance.
-    HEALTH_CAP = DAILY_LOAD_CAP
+    # After eviction, scan for any remaining overloaded days (e.g. pre-existing
+    # clusters this mark didn't create) and nudge toward `sensei rebalance`.
     all_due = get_all_due_dates(root)  # includes the just-marked problem
     from collections import Counter
     load = Counter(all_due)
-    hot_days = sorted(d for d, cnt in load.items() if cnt > HEALTH_CAP and d > today)
+    hot_days = sorted(d for d, cnt in load.items() if cnt > DAILY_LOAD_CAP and d > today)
     if hot_days:
         worst      = max(load[d] for d in hot_days)
         worst_date = max(hot_days, key=lambda d: load[d])
