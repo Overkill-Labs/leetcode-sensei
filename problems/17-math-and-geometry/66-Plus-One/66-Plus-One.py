@@ -2,11 +2,11 @@
 https://leetcode.com/problems/plus-one/
 '''
 
-last_solved     = "2026-06-01"
-revisit_in_days = 115
+last_solved     = "2026-09-24"
+revisit_in_days = 82
 difficulty      = "easy"
 topic_tags      = ["math"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 class Solution:
     def plusOne(self, digits: List[int]) -> List[int]:

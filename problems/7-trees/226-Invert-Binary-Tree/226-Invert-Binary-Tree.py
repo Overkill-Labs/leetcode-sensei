@@ -2,11 +2,11 @@
 https://leetcode.com/problems/invert-binary-tree/
 '''
 
-last_solved     = "2026-08-10"
-revisit_in_days = 45
+last_solved     = "2026-09-24"
+revisit_in_days = 90
 difficulty      = "easy"
 topic_tags      = ["tree"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
