@@ -2,9 +2,9 @@
 https://leetcode.com/problems/valid-parenthesis-string/
 '''
 
-last_solved     = "2026-09-24"
-revisit_in_days = 1
-times_reviewed  = 1
+last_solved     = "2026-09-25"
+revisit_in_days = 3
+times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["string", "dynamic-programming", "stack", "greedy"]
 

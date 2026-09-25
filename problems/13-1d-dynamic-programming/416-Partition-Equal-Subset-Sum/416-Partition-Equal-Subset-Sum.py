@@ -2,28 +2,26 @@
 https://leetcode.com/problems/partition-equal-subset-sum/
 '''
 
-last_solved     = "2026-09-18"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-09-25"
+revisit_in_days = 1
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "dynamic-programming", "knapsack-problem", "0-1-knapsack"]
 
 class Solution:
     def canPartition(self, nums: List[int]) -> bool:
-        self.S = sum(nums)
+        S = sum(nums)
+        TARGET = S // 2
 
-        if self.S % 2 != 0:
+        if S % 2 != 0:
             return False
         
-        from functools import lru_cache
+        dp = [False] * (TARGET + 1)
+        dp[0] = True
+
+        # 0/1 knapsack: iterate backwards so each num is used at most once
+        for num in nums:
+            for target in range(TARGET, num-1, -1):
+                dp[target] = dp[target] or dp[target - num]
         
-        @lru_cache(maxsize=None)
-        def backtrack(idx, curr):
-            if idx == len(nums):
-                if curr == (self.S // 2):
-                    return True
-                return False
-            
-            return backtrack(idx + 1, curr + nums[idx]) or backtrack(idx + 1, curr)
-        
-        return backtrack(0, 0)
+        return dp[-1]

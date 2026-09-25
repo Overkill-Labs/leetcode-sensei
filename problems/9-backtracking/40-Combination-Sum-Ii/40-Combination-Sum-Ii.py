@@ -2,34 +2,34 @@
 https://leetcode.com/problems/combination-sum-ii/
 '''
 
-last_solved     = "2026-08-11"
+last_solved     = "2026-09-25"
 revisit_in_days = 45
-times_reviewed  = 8
+times_reviewed  = 9
 difficulty      = "medium"
 topic_tags      = ["backtracking", "recursion"]
 
 class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        freq_arr = [[candidate, freq] for candidate, freq in Counter(candidates).items()]
+        output = []
 
-        self.output = []
+        candidates.sort()
 
         def backtrack(idx, curr_arr, curr_sum):
-            if curr_sum >= target or idx == len(freq_arr):
+            if curr_sum >= target or idx >= len(candidates):
                 if curr_sum == target:
-                    self.output.append(list(curr_arr))
+                    output.append(list(curr_arr))
                 return
             
-            if freq_arr[idx][1] > 0:
-                curr_arr.append(freq_arr[idx][0])
-                curr_sum += freq_arr[idx][0]
-                freq_arr[idx][1] -= 1
-                backtrack(idx, curr_arr, curr_sum)
-                curr_sum -= curr_arr.pop()
-                freq_arr[idx][1] += 1
+            curr_arr.append(candidates[idx])
+            curr_sum += candidates[idx]
+            backtrack(idx+1, curr_arr, curr_sum)
+            curr_sum -= curr_arr.pop()
+
+            while idx < len(candidates) - 1 and candidates[idx] == candidates[idx + 1]:
+                idx += 1
             
-            backtrack(idx + 1, curr_arr, curr_sum)
+            backtrack(idx+1, curr_arr, curr_sum)
         
         backtrack(0, [], 0)
 
-        return self.output
+        return output
