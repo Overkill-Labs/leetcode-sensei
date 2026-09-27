@@ -3,7 +3,7 @@ https://leetcode.com/problems/decode-ways/
 '''
 
 last_solved     = "2026-08-24"
-revisit_in_days = 40
+revisit_in_days = 43
 times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["dynamic-programming"]

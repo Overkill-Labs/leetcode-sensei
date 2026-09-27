@@ -2,9 +2,9 @@
 https://leetcode.com/problems/sliding-window-maximum/
 '''
 
-last_solved     = "2026-09-21"
-revisit_in_days = 5
-times_reviewed  = 5
+last_solved     = "2026-09-26"
+revisit_in_days = 43
+times_reviewed  = 6
 difficulty      = "hard"
 topic_tags      = ["array", "queue", "sliding-window", "heap-priority-queue", "monotonic-queue", "range-minimum-maximum-query"]
 
