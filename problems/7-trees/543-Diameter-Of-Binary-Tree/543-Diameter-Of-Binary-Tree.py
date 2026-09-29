@@ -3,7 +3,7 @@ https://leetcode.com/problems/diameter-of-binary-tree/
 '''
 
 last_solved     = "2026-09-14"
-revisit_in_days = 45
+revisit_in_days = 65
 difficulty      = "easy"
 topic_tags      = ["trees"]
 times_reviewed  = 6

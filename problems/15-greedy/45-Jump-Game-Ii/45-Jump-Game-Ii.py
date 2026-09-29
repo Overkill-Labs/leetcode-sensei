@@ -2,9 +2,9 @@
 https://leetcode.com/problems/jump-game-ii/
 '''
 
-last_solved     = "2026-08-24"
-revisit_in_days = 36
-times_reviewed  = 4
+last_solved     = "2026-09-29"
+revisit_in_days = 1
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["array", "dynamic-programming", "greedy"]
 
