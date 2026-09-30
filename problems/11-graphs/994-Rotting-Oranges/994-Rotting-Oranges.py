@@ -2,11 +2,11 @@
 https://leetcode.com/problems/rotting-oranges/
 '''
 
-last_solved     = "2026-05-26"
-revisit_in_days = 127
+last_solved     = "2026-09-30"
+revisit_in_days = 12
 difficulty      = "medium"
 topic_tags      = ["graphs", "bfs"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 from collections import deque
 from typing import List

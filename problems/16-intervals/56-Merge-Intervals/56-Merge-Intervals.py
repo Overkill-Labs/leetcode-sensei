@@ -2,9 +2,9 @@
 https://leetcode.com/problems/merge-intervals/
 '''
 
-last_solved     = "2026-08-31"
-revisit_in_days = 30
-times_reviewed  = 4
+last_solved     = "2026-09-30"
+revisit_in_days = 8
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["array", "sorting", "quicksort"]
 
