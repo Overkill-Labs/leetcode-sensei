@@ -3,7 +3,7 @@ https://leetcode.com/problems/permutations/
 '''
 
 last_solved     = "2026-09-02"
-revisit_in_days = 43
+revisit_in_days = 48
 times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["backtracking", "recursion"]

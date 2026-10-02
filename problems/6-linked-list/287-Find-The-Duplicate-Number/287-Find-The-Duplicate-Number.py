@@ -2,9 +2,9 @@
 https://leetcode.com/problems/find-the-duplicate-number/
 '''
 
-last_solved     = "2026-09-17"
+last_solved     = "2026-10-01"
 revisit_in_days = 14
-times_reviewed  = 6
+times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["linked-list", "two-pointers"]
 

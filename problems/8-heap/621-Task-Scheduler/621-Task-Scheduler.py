@@ -2,9 +2,9 @@
 https://leetcode.com/problems/task-scheduler/
 '''
 
-last_solved     = "2026-08-19"
-revisit_in_days = 43
-times_reviewed  = 5
+last_solved     = "2026-10-01"
+revisit_in_days = 45
+times_reviewed  = 6
 difficulty      = "medium"
 topic_tags      = ["heap", "greedy"]
 
