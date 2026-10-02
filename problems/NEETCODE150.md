@@ -1,6 +1,6 @@
 # NeetCode 150 Progress Tracker
 
-Total Completed: **133 / 150**
+Total Completed: **134 / 150**
 
 ## 1. Arrays & Hashing
 - [x] 217. Contains Duplicate (Easy)
@@ -177,7 +177,7 @@ Total Completed: **133 / 150**
 - [x] 66. Plus One (Easy)
 - [x] 172. Factorial Trailing Zeroes (Medium)
 - [ ] 343. Integer Break (Medium)
-- [ ] 50. Pow(x, n) (Medium)
+- [x] 50. Pow(x, n) (Medium)
 
 ## 18. Bit Manipulation
 - [x] 136. Single Number (Easy)
