@@ -3,7 +3,7 @@ https://leetcode.com/problems/same-tree/
 '''
 
 last_solved     = "2026-08-04"
-revisit_in_days = 89
+revisit_in_days = 109
 difficulty      = "easy"
 topic_tags      = ["trees"]
 times_reviewed  = 7

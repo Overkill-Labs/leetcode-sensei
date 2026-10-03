@@ -2,9 +2,9 @@
 https://leetcode.com/problems/add-two-numbers/
 '''
 
-last_solved     = "2026-08-24"
-revisit_in_days = 39
-times_reviewed  = 5
+last_solved     = "2026-10-02"
+revisit_in_days = 45
+times_reviewed  = 6
 difficulty      = "medium"
 topic_tags      = ["linked-list"]
 
