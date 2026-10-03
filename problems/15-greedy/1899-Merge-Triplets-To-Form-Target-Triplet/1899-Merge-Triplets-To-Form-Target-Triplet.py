@@ -2,9 +2,9 @@
 https://leetcode.com/problems/merge-triplets-to-form-target-triplet/
 '''
 
-last_solved     = "2026-09-26"
-revisit_in_days = 7
-times_reviewed  = 3
+last_solved     = "2026-10-03"
+revisit_in_days = 19
+times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "greedy"]
 

@@ -2,9 +2,9 @@
 https://leetcode.com/problems/trapping-rain-water/
 '''
 
-last_solved     = "2026-09-14"
-revisit_in_days = 19
-times_reviewed  = 4
+last_solved     = "2026-10-03"
+revisit_in_days = 40
+times_reviewed  = 5
 difficulty      = "hard"
 topic_tags      = ["array", "two-pointers", "dynamic-programming", "stack", "monotonic-stack"]
 
