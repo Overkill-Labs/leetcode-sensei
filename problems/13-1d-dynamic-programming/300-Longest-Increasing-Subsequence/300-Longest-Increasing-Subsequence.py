@@ -2,9 +2,9 @@
 https://leetcode.com/problems/longest-increasing-subsequence/
 '''
 
-last_solved     = "2026-09-24"
-revisit_in_days = 10
-times_reviewed  = 4
+last_solved     = "2026-10-04"
+revisit_in_days = 1
+times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["array", "binary-search", "dynamic-programming", "longest-increasing-subsequence"]
 
