@@ -3,7 +3,7 @@ https://leetcode.com/problems/remove-nth-node-from-end-of-list/
 '''
 
 last_solved     = "2026-09-06"
-revisit_in_days = 45
+revisit_in_days = 51
 times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["linked-list", "two-pointers"]

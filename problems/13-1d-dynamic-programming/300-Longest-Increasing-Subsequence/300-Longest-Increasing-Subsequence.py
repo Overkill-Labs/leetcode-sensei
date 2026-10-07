@@ -2,9 +2,9 @@
 https://leetcode.com/problems/longest-increasing-subsequence/
 '''
 
-last_solved     = "2026-10-04"
-revisit_in_days = 1
-times_reviewed  = 5
+last_solved     = "2026-10-07"
+revisit_in_days = 14
+times_reviewed  = 6
 difficulty      = "medium"
 topic_tags      = ["array", "binary-search", "dynamic-programming", "longest-increasing-subsequence"]
 
@@ -49,10 +49,9 @@ class Solution:
         # Space: O(N)  — dp array
 
 
-# REVISIT 2026-10-05: re-derive Approach 3 from scratch without looking.
-#   - Explain why tails stays sorted and what tails[k] means ("smallest tail of length k+1").
-#   - Hand-write the binary search (first element >= num) and handle num == existing value.
-#   - State precisely: dp[i] in Approach 2 = LIS *ending at* i (not "best in prefix").
+# REVISIT 2026-10-07: code + binary search were clean; the gap is articulating the invariant.
+#   - Say unprompted: tails[k] = smallest tail of any increasing subsequence of length k+1.
+#   - Use it to explain why tails is sorted (best length-3 tail must exceed best length-2 tail).
 # Approach 3: Patience / Binary Search — tails[k] = smallest tail of any increasing subsequence of length k+1
 # Intuition: keep [2,3] over [2,5] — smaller tails leave more room to extend.
 # tails is always sorted; for each num, overwrite the first element >= num (bisect_left), or append if num beats them all.
