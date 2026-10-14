@@ -2,11 +2,11 @@
 https://leetcode.com/problems/two-sum/description/
 '''
 
-last_solved     = "2026-08-05"
-revisit_in_days = 63
+last_solved     = "2026-10-14"
+revisit_in_days = 43
 difficulty      = "easy"
 topic_tags      = ["arrays", "hashing"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:

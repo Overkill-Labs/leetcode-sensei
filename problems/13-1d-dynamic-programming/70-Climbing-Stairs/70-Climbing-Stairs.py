@@ -2,11 +2,11 @@
 https://leetcode.com/problems/climbing-stairs/
 '''
 
-last_solved     = "2026-09-17"
-revisit_in_days = 18
+last_solved     = "2026-10-14"
+revisit_in_days = 44
 difficulty      = "easy"
 topic_tags      = ["dynamic-programming", "recursion", "memoization"]
-times_reviewed  = 8
+times_reviewed  = 9
 
 
 '''

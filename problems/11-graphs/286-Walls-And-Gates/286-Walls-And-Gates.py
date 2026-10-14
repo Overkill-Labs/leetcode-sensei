@@ -3,7 +3,7 @@ https://leetcode.com/problems/walls-and-gates/description/
 '''
 
 last_solved     = "2026-09-07"
-revisit_in_days = 42
+revisit_in_days = 53
 times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["graphs"]

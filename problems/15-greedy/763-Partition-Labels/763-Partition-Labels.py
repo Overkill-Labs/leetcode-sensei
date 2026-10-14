@@ -2,9 +2,9 @@
 https://leetcode.com/problems/partition-labels/
 '''
 
-last_solved     = "2026-10-04"
-revisit_in_days = 5
-times_reviewed  = 4
+last_solved     = "2026-10-14"
+revisit_in_days = 41
+times_reviewed  = 6
 difficulty      = "medium"
 topic_tags      = ["hash-table", "two-pointers", "string", "greedy"]
 

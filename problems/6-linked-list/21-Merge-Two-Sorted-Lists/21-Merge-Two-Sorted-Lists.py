@@ -2,11 +2,11 @@
 https://leetcode.com/problems/merge-two-sorted-lists/
 '''
 
-last_solved     = "2026-05-29"
-revisit_in_days = 129
+last_solved     = "2026-10-14"
+revisit_in_days = 45
 difficulty      = "easy"
 topic_tags      = ["linked-list"]
-times_reviewed  = 5
+times_reviewed  = 6
 
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
