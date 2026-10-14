@@ -3,10 +3,10 @@ https://leetcode.com/problems/linked-list-cycle/
 '''
 
 last_solved     = "2026-10-14"
-revisit_in_days = 14
+revisit_in_days = 45
 difficulty      = "easy"
 topic_tags      = ["linked-list"]
-times_reviewed  = 6
+times_reviewed  = 7
 
 # REVISIT 2026-10-14: code was instant; needed two nudges for WHY fast meets slow.
 #   - Say unprompted: inside the cycle, the gap (fast behind slow) shrinks by exactly 1 per step,

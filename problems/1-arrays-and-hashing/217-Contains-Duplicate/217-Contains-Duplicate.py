@@ -3,8 +3,8 @@ https://leetcode.com/problems/contains-duplicate/description/
 '''
 
 last_solved     = "2026-10-14"
-revisit_in_days = 14
-times_reviewed  = 7
+revisit_in_days = 39
+times_reviewed  = 8
 difficulty      = "easy"
 topic_tags      = ["arrays", "hashing"]
 
