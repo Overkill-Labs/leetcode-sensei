@@ -2,11 +2,11 @@
 https://leetcode.com/problems/house-robber-ii/
 '''
 
-last_solved     = "2026-08-10"
-revisit_in_days = 59
+last_solved     = "2026-10-17"
+revisit_in_days = 14
 difficulty      = "medium"
 topic_tags      = ["dynamic-programming"]
-times_reviewed  = 8
+times_reviewed  = 10
 
 class Solution:
     def rob(self, nums: List[int]) -> int:

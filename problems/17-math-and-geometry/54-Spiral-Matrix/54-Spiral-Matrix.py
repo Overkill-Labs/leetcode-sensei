@@ -3,7 +3,7 @@ https://leetcode.com/problems/spiral-matrix/
 '''
 
 last_solved     = "2026-10-07"
-revisit_in_days = 1
+revisit_in_days = 12
 times_reviewed  = 2
 difficulty      = "medium"
 topic_tags      = ["array", "matrix", "simulation"]

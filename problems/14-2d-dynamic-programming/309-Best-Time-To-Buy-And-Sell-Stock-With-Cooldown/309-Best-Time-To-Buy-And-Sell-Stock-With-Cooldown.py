@@ -3,7 +3,7 @@ https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
 '''
 
 last_solved     = "2026-09-09"
-revisit_in_days = 30
+revisit_in_days = 58
 times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "dynamic-programming"]

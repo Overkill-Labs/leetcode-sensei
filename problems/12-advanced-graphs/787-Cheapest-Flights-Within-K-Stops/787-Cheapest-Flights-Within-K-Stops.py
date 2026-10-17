@@ -3,7 +3,7 @@ https://leetcode.com/problems/cheapest-flights-within-k-stops/
 '''
 
 last_solved     = "2026-09-10"
-revisit_in_days = 30
+revisit_in_days = 58
 times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["dynamic-programming", "depth-first-search", "breadth-first-search", "graph", "heap-priority-queue", "shortest-path"]

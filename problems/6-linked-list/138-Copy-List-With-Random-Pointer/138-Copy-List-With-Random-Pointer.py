@@ -3,7 +3,7 @@ https://leetcode.com/problems/copy-list-with-random-pointer/
 '''
 
 last_solved     = "2026-09-09"
-revisit_in_days = 36
+revisit_in_days = 75
 times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["linked-list", "hash-map"]

@@ -3,7 +3,7 @@ https://leetcode.com/problems/rotting-oranges/
 '''
 
 last_solved     = "2026-09-30"
-revisit_in_days = 12
+revisit_in_days = 46
 difficulty      = "medium"
 topic_tags      = ["graphs", "bfs"]
 times_reviewed  = 6

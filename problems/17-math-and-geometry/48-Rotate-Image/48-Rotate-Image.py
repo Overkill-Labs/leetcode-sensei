@@ -3,7 +3,7 @@ https://leetcode.com/problems/rotate-image/
 '''
 
 last_solved     = "2026-09-14"
-revisit_in_days = 30
+revisit_in_days = 68
 times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "math", "matrix"]

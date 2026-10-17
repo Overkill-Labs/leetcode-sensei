@@ -3,7 +3,7 @@ https://leetcode.com/problems/reorder-list/
 '''
 
 last_solved     = "2026-08-28"
-revisit_in_days = 45
+revisit_in_days = 80
 times_reviewed  = 8
 difficulty      = "medium"
 topic_tags      = ["linked-list", "two-pointers"]

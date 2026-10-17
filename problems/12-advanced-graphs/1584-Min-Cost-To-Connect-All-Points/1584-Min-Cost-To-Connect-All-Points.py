@@ -3,7 +3,7 @@ https://leetcode.com/problems/min-cost-to-connect-all-points/
 '''
 
 last_solved     = "2026-09-05"
-revisit_in_days = 35
+revisit_in_days = 64
 times_reviewed  = 5
 difficulty      = "medium"
 topic_tags      = ["array", "union-find", "graph", "minimum-spanning-tree", "prims-algorithm", "kruskals-algorithm", "boruvkas-algorithm"]

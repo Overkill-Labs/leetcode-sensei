@@ -3,7 +3,7 @@ https://leetcode.com/problems/distinct-subsequences/
 '''
 
 last_solved     = "2026-09-17"
-revisit_in_days = 30
+revisit_in_days = 68
 times_reviewed  = 4
 difficulty      = "hard"
 topic_tags      = ["string", "dynamic-programming"]

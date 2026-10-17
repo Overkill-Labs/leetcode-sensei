@@ -3,7 +3,7 @@ https://leetcode.com/problems/interleaving-string/
 '''
 
 last_solved     = "2026-09-11"
-revisit_in_days = 30
+revisit_in_days = 60
 times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["string", "dynamic-programming"]

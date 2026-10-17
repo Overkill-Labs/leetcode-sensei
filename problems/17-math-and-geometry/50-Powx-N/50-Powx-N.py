@@ -3,7 +3,7 @@ https://leetcode.com/problems/powx-n/
 '''
 
 last_solved     = "2026-10-07"
-revisit_in_days = 7
+revisit_in_days = 44
 times_reviewed  = 3
 difficulty      = "medium"
 topic_tags      = ["math", "recursion"]

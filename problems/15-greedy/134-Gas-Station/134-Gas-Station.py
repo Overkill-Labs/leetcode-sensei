@@ -3,7 +3,7 @@ https://leetcode.com/problems/gas-station/
 '''
 
 last_solved     = "2026-09-11"
-revisit_in_days = 30
+revisit_in_days = 62
 times_reviewed  = 4
 difficulty      = "medium"
 topic_tags      = ["array", "greedy"]

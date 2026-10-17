@@ -3,7 +3,7 @@ https://leetcode.com/problems/search-in-rotated-sorted-array/
 '''
 
 last_solved     = "2026-08-29"
-revisit_in_days = 45
+revisit_in_days = 81
 times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["binary-search"]
