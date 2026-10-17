@@ -3,7 +3,7 @@ https://leetcode.com/problems/max-area-of-island/
 '''
 
 last_solved     = "2026-09-16"
-revisit_in_days = 45
+revisit_in_days = 64
 times_reviewed  = 9
 difficulty      = "medium"
 topic_tags      = ["graphs", "dfs", "bfs"]

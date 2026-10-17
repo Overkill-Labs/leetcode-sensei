@@ -2,9 +2,9 @@
 https://leetcode.com/problems/decode-ways/
 '''
 
-last_solved     = "2026-08-24"
-revisit_in_days = 43
-times_reviewed  = 5
+last_solved     = "2026-10-17"
+revisit_in_days = 14
+times_reviewed  = 7
 difficulty      = "medium"
 topic_tags      = ["dynamic-programming"]
 
