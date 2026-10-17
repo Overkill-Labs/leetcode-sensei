@@ -210,9 +210,12 @@ Automatically increments `times_reviewed` and applies the progression gate and l
 sensei rebalance              # Dry run — preview moves, no writes
 sensei rebalance --apply      # Write changes to disk
 sensei rebalance --cap 5      # Flag days with more than 5 reviews (default cap: 3, set via DAILY_LOAD_CAP)
+sensei rebalance --backlog    # Also spread overdue/due-today problems onto future days
 ```
 
 Finds days exceeding the review cap and displaces the most-reviewed problems (most stable memory) to nearby low-load dates within ±50% of their current interval. Always preview before applying.
+
+`--backlog` clears an overdue pile-up: every overdue or due-today problem is moved to the earliest future day with fewer than `cap` total reviews (s/h included), most overdue first.
 
 ### `sensei new <num> <slug> <cat>` — scaffold
 

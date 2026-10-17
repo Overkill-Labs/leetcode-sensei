@@ -14,6 +14,7 @@ Usage:
     sensei rebalance --apply      # write changes to disk
     sensei rebalance --cap 4      # treat days with > 4 reviews as overloaded
     sensei rebalance --apply --cap 5
+    sensei rebalance --backlog    # also spread overdue/due-today problems onto future days
 
 Default cap is controlled by DAILY_LOAD_CAP in src/config.py.
 '''
@@ -162,6 +163,42 @@ def find_best_date(current_due: date, interval: int, today: date, load_map: dict
     return None
 
 
+def plan_backlog_moves(problems: list, today: date, cap: int) -> list:
+    """
+    Spread every overdue / due-today problem onto future days so that no day
+    holds more than `cap` reviews in total (exempt s/h problems included —
+    the goal is a real daily workload, not just the non-exempt load).
+
+    Most-overdue problems get the earliest free slots. Mutates each moved
+    problem's due_date and returns the list of moves.
+    """
+    full_load = {}
+    for p in problems:
+        if p["due_date"] > today:
+            full_load[p["due_date"]] = full_load.get(p["due_date"], 0) + 1
+
+    backlog = sorted(
+        (p for p in problems if p["due_date"] <= today),
+        key=lambda p: (p["due_date"], p["times_reviewed"]),
+    )
+
+    moves = []
+    candidate = today + timedelta(days=1)
+    for p in backlog:
+        while full_load.get(candidate, 0) >= cap:
+            candidate += timedelta(days=1)
+        moves.append({
+            "label":    p["label"],
+            "filepath": p["filepath"],
+            "from":     p["due_date"].isoformat(),
+            "to":       candidate.isoformat(),
+            "times_reviewed": p["times_reviewed"],
+        })
+        full_load[candidate] = full_load.get(candidate, 0) + 1
+        p["due_date"] = candidate
+    return moves
+
+
 def update_problem_due_date(filepath: str, new_due: date, last_solved: date) -> None:
     """
     Rewrite revisit_in_days in the .py file so that
@@ -204,6 +241,14 @@ def main() -> None:
         print(f"\n  {GREY}No tracked problems found.{RESET}\n")
         return
 
+    moves   = []
+    changed = set()
+
+    # --backlog: pull overdue / due-today problems onto future days first
+    if "--backlog" in args:
+        moves = plan_backlog_moves(problems, today, cap)
+        changed = {m["filepath"] for m in moves}
+
     load_map = build_load_map(problems)
 
     # Find overloaded days (future only — don't touch past/today)
@@ -211,15 +256,12 @@ def main() -> None:
         d for d, cnt in load_map.items() if cnt > cap and d > today
     )
 
-    if not overloaded_days:
+    if not overloaded_days and not moves:
         if do_json:
             print(json.dumps({"status": "balanced", "moves": []}))
         else:
             print(f"\n  {GREEN}[OK]{RESET}  Schedule is already balanced (max {cap} reviews/day).\n")
         return
-
-    moves   = []
-    changed = set()
 
     for day in overloaded_days:
         # Get non-exempt problems on this day, sorted by times_reviewed DESC then

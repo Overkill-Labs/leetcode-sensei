@@ -1114,6 +1114,7 @@ Use `--no-spread` to skip smoothing (and the hard-cap eviction pass) and get the
 sensei rebalance           # dry run — preview only
 sensei rebalance --apply   # write changes to disk
 sensei rebalance --cap 5   # flag days with more than 5 reviews
+sensei rebalance --backlog # also spread overdue/due-today problems onto future days (user-requested only)
 ```
 
 Default cap is `DAILY_LOAD_CAP` from `src/config.py` (currently **3**, hard-capped). Override it via the `DAILY_LOAD_CAP` environment variable — set in the project's `.env` file — rather than editing the source. Changing it adjusts both rebalance and per-mark load smoothing/eviction simultaneously.
